@@ -1,8 +1,11 @@
-<ckeditor 
-[editor]="Editor"
-[config]="{ toolbar: [ 'Save','bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList']}"
-(change)="onChange($event)">
-</ckeditor>
-<button (click)="onClickMe()">Print to console</button>
+<div class="main">
+    <ckeditor class="editor-container"
+    [editor]="Editor"
+    [config]="{ toolbar: [ 'Save','bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList']}"
+    (change)="onChange($event)"
+    debounce="500">
+    </ckeditor>
+    <button class="console-button" (click)="onClickMe()">Print to console</button>
+</div>
 
 <router-outlet></router-outlet>
