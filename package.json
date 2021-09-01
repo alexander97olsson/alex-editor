@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build --prod --base-href ./ && rsync -av --delete dist/alex-editor-program/ alos17@ssh.student.bth.se:www/editor"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +19,11 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
+    "@ckeditor/ckeditor5-angular": "^2.0.2",
+    "@ckeditor/ckeditor5-block-quote": "^29.2.0",
+    "@ckeditor/ckeditor5-build-classic": "^29.2.0",
+    "@ckeditor/ckeditor5-font": "^29.2.0",
+    "ckeditor5-media-embed": "^1.8.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -26,6 +32,7 @@
     "@angular-devkit/build-angular": "~12.2.3",
     "@angular/cli": "~12.2.3",
     "@angular/compiler-cli": "~12.2.0",
+    "@types/ckeditor__ckeditor5-build-classic": "^29.0.1",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~3.8.0",
