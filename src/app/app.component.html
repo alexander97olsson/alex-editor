@@ -1,20 +1,20 @@
-<div class="main" ng-app="myApp">
+<div class="main">
     <form #userlogin = "ngForm" (ngSubmit) = "onClickSubmit(userlogin.value)">
+        <label class="title-header" for="title">Title: </label>
+        <input class="title-text" type = "text" name = "titleText" placeholder = "example title" [formControl]="titleText" ngModel>
         <ckeditor class="editor-container"
-        [formControl]="name"
-        [data]="model.editorData"
+        [formControl]="mainText"
+        [data]="model.editorDataText"
         [editor]="Editor"
         [config]="{ toolbar: [ 'Save','bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList']}"
         (change)="onChange($event)"
         debounce="500">
         </ckeditor>
-        <input type = "text" name = "title" placeholder = "title" ngModel>
         <br/>
-        <label for="name">Name: </label>
-        <input id="name" type="text" [formControl]="name">
-        
-        <p>Value: {{ name.value }}</p>
-        <input class="console-button" type = "submit" value = "submit">
+
+        <p>Text: {{ mainText.value }}</p>
+        <p>Title: {{ titleText.value }}</p>
+        <input class="console-button" type = "submit" value = "Create new">
     </form>
     <button class="console-button" (click)="onClickGetAll()">Get all</button>
 </div>

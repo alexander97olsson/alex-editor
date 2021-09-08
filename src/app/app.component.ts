@@ -11,23 +11,30 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'alex-editor-program';
   public Editor = ClassicEditor;
+  public objectDocs = [];
   public model = {
-    editorData: '<p>Hello, world!</p>'
+    editorDataTitle: '<p>Hello, world!</p>',
+    editorDataText: '<p>Hello, world!</p>'
   };
   constructor(private router: Router) { }
+
   consoleMessage = '';
-  errorMessage = "";
-  name = new FormControl('');
-  myGroup = new FormGroup({
-    firstName: new FormControl()
- });
-  updateName() {
-    this.name.setValue(this.model.editorData);
+
+  mainText = new FormControl('');
+  titleText = new FormControl('');
+
+  updateMainText() {
+    this.mainText.setValue(this.model.editorDataText);
   }
+
+  updateTitleText() {
+    this.titleText.setValue(this.model.editorDataTitle);
+  }
+
   public onChange( { editor }: ChangeEvent ) {
     const data = editor.getData();
     this.consoleMessage = data;
-    this.model.editorData = data;
+    this.model.editorDataText = data;
   }
 
   public async getAll() {
@@ -45,18 +52,23 @@ export class AppComponent {
     }
   }
   async onClickGetAll() {
-    const exam = await this.getAll();
-    console.log(exam.data.msg[0].title);
-    this.model.editorData = exam.data.msg[2].maintext;
-    console.log(this.model.editorData);
-    this.updateName();
+    const objectDocs = await this.getAll();
+    console.log(objectDocs.data.msg[0].title);
+    console.log(objectDocs.data.msg[0]._id);
+    for (let i = 0; i < objectDocs.data.msg.length; i++) {
+      console.log(objectDocs.data.msg[i].maintext);
+      this.model.editorDataText += objectDocs.data.msg[i].maintext;
+    }
+    this.model.editorDataTitle = objectDocs.data.msg[0].title;
+    this.updateMainText();
+    this.updateTitleText();
     this.router.navigate(['/']);
   }
 
   onClickSubmit(data) {
-    console.log("title is : " + data.title);
+    console.log("title is : " + data.titleText);
     var delivery = {
-      title: data.title,
+      title: data.titleText,
       maintext: this.consoleMessage
     };
     fetch(`https://ramverk-editor-alos17.azurewebsites.net/data`, {
