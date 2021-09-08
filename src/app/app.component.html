@@ -1,11 +1,23 @@
-<div class="main">
-    <ckeditor class="editor-container"
-    [editor]="Editor"
-    [config]="{ toolbar: [ 'Save','bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList']}"
-    (change)="onChange($event)"
-    debounce="500">
-    </ckeditor>
-    <button class="console-button" (click)="onClickMe()">Print to console</button>
+<div class="main" ng-app="myApp">
+    <form #userlogin = "ngForm" (ngSubmit) = "onClickSubmit(userlogin.value)">
+        <ckeditor class="editor-container"
+        [formControl]="name"
+        [data]="model.editorData"
+        [editor]="Editor"
+        [config]="{ toolbar: [ 'Save','bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList']}"
+        (change)="onChange($event)"
+        debounce="500">
+        </ckeditor>
+        <input type = "text" name = "title" placeholder = "title" ngModel>
+        <br/>
+        <label for="name">Name: </label>
+        <input id="name" type="text" [formControl]="name">
+        
+        <p>Value: {{ name.value }}</p>
+        <input class="console-button" type = "submit" value = "submit">
+    </form>
+    <button class="console-button" (click)="onClickGetAll()">Get all</button>
 </div>
+
 
 <router-outlet></router-outlet>
