@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
-import {Injectable, Renderer2, RendererFactory2} from '@angular/core';
-import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,16 +17,15 @@ export class AppComponent {
   public selected = "";
   public consoleMessage = '';
   public model = {
-    editorDataTitle: '<p>Hello, world!</p>',
-    editorDataText: '<p>Hello, world!</p>'
+    editorDataTitle: '',
+    editorDataText: ''
   };
-  
-  constructor (private renderer: Renderer2) {
-    this.onClickGetAll();
-  }
-
   mainText = new FormControl('');
   titleText = new FormControl('');
+  
+  ngOnInit() {
+    this.onClickGetAll();
+  }
 
   updateMainText() {
     this.mainText.setValue(this.model.editorDataText);
@@ -36,15 +34,15 @@ export class AppComponent {
   updateTitleText() {
     this.titleText.setValue(this.model.editorDataTitle);
   }
+
   public onChangeTitle(data) {
     this.model.editorDataTitle = data.target.value;
-    console.log(this.model.editorDataTitle);
   }
+
   public onChange( { editor }: ChangeEvent ) {
     const data = editor.getData();
     this.consoleMessage = data;
     this.model.editorDataText = data;
-    console.log(this.titleText.value);
   }
 
   async onClickLoad() {
