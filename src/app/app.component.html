@@ -1,7 +1,7 @@
 <div class="main">
     <form #userlogin = "ngForm" (ngSubmit) = "onClickSubmit(userlogin.value)">
         <label class="title-header" for="title">Title: </label>
-        <input class="title-text" type = "text" name = "titleText" placeholder = "example title" [formControl]="titleText" ngModel>
+        <input class="title-text" type = "text" name = "titleText" placeholder = "example title" (change)="onChangeTitle($event)" [formControl]="titleText" ngModel>
         <ckeditor class="editor-container"
         [formControl]="mainText"
         [data]="model.editorDataText"
@@ -10,13 +10,19 @@
         (change)="onChange($event)"
         debounce="500">
         </ckeditor>
+        <select id='peeps' name='people' [(ngModel)]="selected">
+            <option *ngFor="let item of objectDocs123.msg" [value]="item._id">
+              {{item.title}}
+            </option>
+        </select>
         <br/>
-
         <p>Text: {{ mainText.value }}</p>
         <p>Title: {{ titleText.value }}</p>
         <input class="console-button" type = "submit" value = "Create new">
     </form>
+    <button class="console-button" (click)="onClickLoad()">Load</button>
     <button class="console-button" (click)="onClickGetAll()">Get all</button>
+    <button class="console-button" (click)="updateSpecific()">Update</button>
 </div>
 
 
