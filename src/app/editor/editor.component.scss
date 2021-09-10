@@ -1,0 +1,61 @@
+.main {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.project-title {
+    text-align: center;
+}
+
+.console-button {
+    margin-left: 10px;
+    width: 120px;
+    height: 40px;
+    cursor: pointer;
+    background: none;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 2px solid black;
+    font-family: "Lato",sans-serif;
+}
+
+.console-button-update {
+    float: left;
+    margin-left: 10px;
+    width: 120px;
+    height: 40px;
+    cursor: pointer;
+    background: none;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 2px solid black;
+    font-family: "Lato",sans-serif;
+}
+
+.console-button:hover,
+.console-button-update:hover {
+    background-color: black;
+    color: white;
+}
+
+.title-header {
+    font-size: 20px;
+}
+
+.title-text {
+    width: 99%;
+    height: 30px;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.console-button-load {
+    float: right;
+    margin-right: 10px;
+}
+
+.dropdown {
+    float: left;
+    width: 500px;
+    height: 40px;
+}
