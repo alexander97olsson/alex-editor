@@ -1,20 +1,16 @@
 language: node_js
 node_js:
-    - "node"
-    - "14"
-    - "12"
-    - "11"
+  - "12"
 
-branches:
-  only:
-  - master
+addons:
+  chrome: stable
 
+cache:
+  directories:
+     - ./node_modules
 
 install:
   - npm install
 
-before_script:
-  - npm install -g @angular/cli
-
 script:
-    - npm test
+  - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI

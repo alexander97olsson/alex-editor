@@ -6,7 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  getTest(arg1, arg2) {
+  constructor() { }
+  url = `https://ramverk-editor-alos17.azurewebsites.net/data`;
+  title = 'app-title-test';
+
+  getTest(arg1: number, arg2: number) {
     return arg1 + arg2;
   }
 }
