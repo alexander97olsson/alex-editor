@@ -25,7 +25,7 @@ export class EditorComponent implements OnInit {
   };
   mainText = new FormControl('');
   titleText = new FormControl('');
-  
+
   ngOnInit() {
     this.onClickGetAll();
   }

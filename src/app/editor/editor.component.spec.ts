@@ -18,14 +18,4 @@ describe('EditorComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it(`should have as title 'alex-editor-program'`, () => {
-    const fixture = TestBed.createComponent(EditorComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('Alex-Editor');
-  });
 });

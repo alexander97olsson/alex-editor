@@ -20,10 +20,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', () => {
+  it(`should add two ints`, () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('alex-editor-program app is running!');
+    const app = fixture.componentInstance;
+    expect(app.getTest(2, 2)).toEqual(4);
   });
 });
