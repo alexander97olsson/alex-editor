@@ -20,9 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should add two ints`, () => {
+  it(`should add two ints and get 4`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.getTest(2, 2)).toEqual(4);
   });
+
+  it(`should check if url is right`, () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app.url).toEqual("https://ramverk-editor-alos17.azurewebsites.net/data");
+  });
+
 });
