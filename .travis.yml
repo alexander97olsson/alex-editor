@@ -2,20 +2,19 @@
 language: node_js
 node_js:
   - "12"
-dist: trusty
-sudo: required
+
+dist: xenial
+services:
+  - xvfb
+
 addons:
-  chrome: stable
-  sonarcloud:
-    organization: "aboudard"
+  firefox: "49.0"
+
 branches:
   only:
     - master
+
 before_script:
   - npm install -g --silent @angular/cli@7.3.5
 script:
   - npm run test
-
-deploy:
-  provider: pages
-  skip_cleanup: true
