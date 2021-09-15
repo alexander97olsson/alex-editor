@@ -1,17 +1,21 @@
+
 language: node_js
 node_js:
   - "10"
-
-dist: xenial
-services:
-  - xvfb
-
+dist: trusty
+sudo: required
 addons:
-  firefox: "49.0"
-
-cache:
-  directories:
-     - ./node_modules
-
+  chrome: stable
+  sonarcloud:
+    organization: "aboudard"
+branches:
+  only:
+    - master
+before_script:
+  - npm install -g --silent @angular/cli@7.3.5
 script:
-  - ng test
+  - npm run test
+
+deploy:
+  provider: pages
+  skip_cleanup: true
