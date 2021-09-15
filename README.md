@@ -1,3 +1,4 @@
+[![Build Status](https://app.travis-ci.com/alexander97olsson/alex-editor.svg?branch=main)](https://app.travis-ci.com/alexander97olsson/alex-editor)
 # AlexEditorProgram
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.3.

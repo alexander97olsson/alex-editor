@@ -4,7 +4,6 @@ language: node_js
 node_js:
     - "node"
     - "12"
-    - "14"
 
 sudo: false
 
@@ -15,12 +14,7 @@ services:
 addons:
   firefox: "49.0"
 
-git:
-    submodules: false
-
-
 before_script:
-    - npm install
     - npm install -g @angular/cli
 
 cache:
@@ -29,7 +23,3 @@ cache:
 
 script:
     - npm test --watch=false --no-progress --single-run
-
-after_success:
-    - npm run report-coveralls
-    - npm run report-codecov
