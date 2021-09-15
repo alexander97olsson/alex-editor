@@ -1,7 +1,12 @@
 
 language: node_js
+
 node_js:
-  - "12"
+    - "node"
+    - "12"
+    - "14"
+
+sudo: false
 
 dist: xenial
 services:
@@ -10,11 +15,21 @@ services:
 addons:
   firefox: "49.0"
 
-branches:
-  only:
-    - master
+git:
+    submodules: false
+
 
 before_script:
-  - npm install -g --silent @angular/cli@7.3.5
+    - npm install
+    - npm install -g @angular/cli
+
+cache:
+  directories:
+     - ./node_modules
+
 script:
-  - npm run test
+    - npm test --watch=false --no-progress --single-run
+
+after_success:
+    - npm run report-coveralls
+    - npm run report-codecov
