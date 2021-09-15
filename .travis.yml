@@ -2,8 +2,12 @@ language: node_js
 node_js:
   - "10"
 
+dist: xenial
+services:
+  - xvfb
+
 addons:
-  chrome: stable
+  firefox: "49.0"
 
 cache:
   directories:
@@ -13,4 +17,4 @@ install:
   - npm install
 
 script:
-  - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+  - npm run test
