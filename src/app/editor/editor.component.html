@@ -17,6 +17,7 @@
         [editor]="Editor"
         [config]="{ toolbar: [ 'Save','bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList']}"
         (change)="onChange($event)"
+        (keyup)="editDoc()"
         debounce="500">
         </ckeditor>
         <br/>

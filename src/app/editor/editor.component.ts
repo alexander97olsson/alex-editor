@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-editor',
@@ -9,8 +10,7 @@ import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit {
-
-  constructor() { }
+  
   url = `https://ramverk-editor-alos17.azurewebsites.net/data`;
   title = 'Alex-Editor';
   public Editor = ClassicEditor;
@@ -19,15 +19,33 @@ export class EditorComponent implements OnInit {
   public nameArray: string[] = [];
   public selected = "";
   public consoleMessage = '';
+  public activeID = "";
+  public editorData;
   public model = {
     editorDataTitle: '',
     editorDataText: ''
+  };
+  public data = {
+    _id: "LÅNG OCH SLUMPAT",
+    html: "Texten i html format från editorn"
   };
   mainText = new FormControl('');
   titleText = new FormControl('');
 
   ngOnInit() {
     this.onClickGetAll();
+  }
+  
+  constructor(private socket: Socket) {
+    //this.sendMessage("what up server");
+  }
+  
+  startSocket(id) {
+    this.socket.emit("joinRoom", id);
+    this.socket.on("getDoc", (data) => {
+        this.mainText.setValue(data);
+        console.log(data);
+    });
   }
 
   updateMainText() {
@@ -43,9 +61,23 @@ export class EditorComponent implements OnInit {
   }
 
   public onChange( { editor }: ChangeEvent ) {
-    const data = editor.getData();
-    this.consoleMessage = data;
-    this.model.editorDataText = data;
+    this.editorData = editor;
+    const tempData = editor.getData();
+    this.consoleMessage = tempData;
+    this.model.editorDataText = tempData;
+    
+    this.data._id = this.activeID;
+    this.data.html = tempData
+  }
+  
+  editDoc() {
+    this.socket.emit("doc", this.data);
+    this.socket.on("doc", (data) => {
+      const viewFragment = this.editorData.data.processor.toView( data.html );
+      const modelFragment = this.editorData.data.toModel( viewFragment );
+      this.mainText.setValue("");
+      this.editorData.model.insertContent( modelFragment );
+    });
   }
 
   async onClickLoad() {
@@ -54,7 +86,9 @@ export class EditorComponent implements OnInit {
     for (let i = 0; i < middleHand.data.msg.length; i++) {
       if(this.selected == middleHand.data.msg[i]._id) {
         this.model.editorDataText = middleHand.data.msg[i].maintext;
-        this.model.editorDataTitle = middleHand.data.msg[i].title
+        this.model.editorDataTitle = middleHand.data.msg[i].title;
+        this.startSocket(middleHand.data.msg[i]._id);
+        this.activeID = middleHand.data.msg[i]._id;
       }
     }
     this.updateMainText();
