@@ -3,6 +3,8 @@ import { FormControl } from '@angular/forms';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 import { Socket } from 'ngx-socket-io';
+import { globals } from '../token';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-editor',
@@ -12,14 +14,20 @@ import { Socket } from 'ngx-socket-io';
 export class EditorComponent implements OnInit {
   
   url = `https://ramverk-editor-alos17.azurewebsites.net/data`;
+  updateUserUrl = `https://ramverk-editor-alos17.azurewebsites.net/data/user`;
+  urlUsers = `https://ramverk-editor-alos17.azurewebsites.net/auth/users`;
   title = 'Alex-Editor';
   public Editor = ClassicEditor;
   public objectDocs = {} as any;
-  public objectDocsComp = {} as any;
+  public objectDocsComp = [] as any;
+  public objectUsers = {} as any;
+  public objectUsersComp = [] as any;
   public nameArray: string[] = [];
   public selected = "";
+  public userSelected = "";
   public consoleMessage = '';
   public activeID = "";
+  public content = "";
   public editorData;
   public model = {
     editorDataTitle: '',
@@ -31,13 +39,19 @@ export class EditorComponent implements OnInit {
   };
   mainText = new FormControl('');
   titleText = new FormControl('');
+  owner = new FormControl('');
+
+  constructor(private socket: Socket, private router: Router) {
+    if(!globals.token) {
+      this.router.navigate(['/login'])
+    }
+    //this.sendMessage("what up server");
+  }
 
   ngOnInit() {
     this.onClickGetAll();
-  }
-  
-  constructor(private socket: Socket) {
-    //this.sendMessage("what up server");
+    this.owner.setValue(globals.userLogged);
+    this.onClickUsers();
   }
   
   startSocket(id) {
@@ -49,6 +63,7 @@ export class EditorComponent implements OnInit {
   }
 
   updateMainText() {
+    this.content = this.model.editorDataText;
     this.mainText.setValue(this.model.editorDataText);
   }
 
@@ -73,10 +88,7 @@ export class EditorComponent implements OnInit {
   editDoc() {
     this.socket.emit("doc", this.data);
     this.socket.on("doc", (data) => {
-      const viewFragment = this.editorData.data.processor.toView( data.html );
-      const modelFragment = this.editorData.data.toModel( viewFragment );
-      this.mainText.setValue("");
-      this.editorData.model.insertContent( modelFragment );
+      this.content = data.html
     });
   }
 
@@ -99,7 +111,8 @@ export class EditorComponent implements OnInit {
     try {
       const response = await fetch(this.url, {
         headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
+            'x-access-token': globals.token
         },
         method: 'GET'
       });
@@ -110,8 +123,19 @@ export class EditorComponent implements OnInit {
     }
   }
   async onClickGetAll() {
+    this.objectDocsComp = [];
     this.objectDocs = await this.getAll();
-    this.objectDocsComp = this.objectDocs.data;
+    for (let i = 0; i < this.objectDocs.data.msg.length; i++) {
+      if(this.objectDocs.data.msg[i].owner == globals.userLogged){
+        console.log(i);
+        this.objectDocsComp.push(this.objectDocs.data.msg[i]);
+      }
+      for (let j = 0; j < this.objectDocs.data.msg[i].allowed_users.length; j++) {
+        if(this.objectDocs.data.msg[i].allowed_users[j] == globals.userLogged){
+          this.objectDocsComp.push(this.objectDocs.data.msg[i]);
+        }    
+      }
+    }
     this.updateMainText();
     this.updateTitleText();
   }
@@ -123,12 +147,14 @@ export class EditorComponent implements OnInit {
     console.log("object is : " + data);
     var delivery = {
       title: this.model.editorDataTitle,
-      maintext: this.model.editorDataText
+      maintext: this.model.editorDataText,
+      owner: globals.userLogged
     };
     fetch(this.url, {
       body: JSON.stringify(delivery),
       headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'x-access-token': globals.token
       },
       method: 'POST'
     }).then(function (response) {
@@ -151,7 +177,8 @@ export class EditorComponent implements OnInit {
       fetch(this.url, {
         body: JSON.stringify(delivery),
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'x-access-token': globals.token
         },
         method: 'PUT'
         }).then(function (response) {
@@ -162,4 +189,57 @@ export class EditorComponent implements OnInit {
      }
     }
    }
+
+   public async getAllUsers() {
+    try {
+      const response = await fetch(this.urlUsers, {
+        headers: {
+            'content-type': 'application/json',
+            'x-access-token': globals.token
+        },
+        method: 'GET'
+      });
+      const result = await response.json();
+      return result;
+      } catch (error) {
+        console.error(error);
+    }
+  }
+  async onClickUsers() {
+    this.objectUsersComp = []
+    this.objectUsers = await this.getAllUsers();
+    for (let i = 0; i < this.objectUsers.data.users.length; i++) {
+      if (globals.userLogged != this.objectUsers.data.users[i].email) {
+        this.objectUsersComp.push(this.objectUsers.data.users[i]);
+        console.log("added" + this.objectUsers.data.users[i].email);
+      }
+    }
+  }
+
+  async onClickSaveUser() {
+    const middleHand = await this.getAll();
+    console.log(this.selected)
+    console.log(this.userSelected)
+   for (let i = 0; i < middleHand.data.msg.length; i++) {
+    if(this.selected == middleHand.data.msg[i]._id) {
+      var delivery = {
+        __id: this.selected,
+        allowed_users: this.userSelected
+      };
+      fetch(this.updateUserUrl, {
+        body: JSON.stringify(delivery),
+        headers: {
+          'content-type': 'application/json',
+          'x-access-token': globals.token
+        },
+        method: 'PUT'
+        }).then(function (response) {
+          return response.json();
+        }).then(function(data) {
+          console.log(data)
+        })
+     }
+    }
+  }
+
 }

@@ -10,6 +10,11 @@ import { EditorComponent } from './editor/editor.component';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
+import { HomeComponent } from './home/home.component';
+import { UserComponent } from './user/user.component';
+import { LogInComponent } from './user/log-in/log-in.component';
+import { RegisterComponent } from './user/register/register.component';
+
 //const config: SocketIoConfig = { url: 'http://localhost:1337', options: {} };
 const config: SocketIoConfig = { url: 'https://ramverk-editor-alos17.azurewebsites.net', options: {} };
 
@@ -17,7 +22,11 @@ const config: SocketIoConfig = { url: 'https://ramverk-editor-alos17.azurewebsit
 @NgModule({
   declarations: [
     AppComponent,
-    EditorComponent
+    EditorComponent,
+    LogInComponent,
+    RegisterComponent,
+    HomeComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,

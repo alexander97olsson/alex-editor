@@ -3,3 +3,65 @@
 .ck {
     height: 400px;
 }
+
+.main-title {
+    text-align: center;
+}
+
+button.btn-submit{
+    margin-top: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #38547b;
+    color: #fff;
+    width: 100%;
+}
+
+button.btn-submit:hover {
+    cursor: pointer;
+}
+
+button.btn-submit:focus,button.btn-submit:hover{
+    background-color: #5496f3;
+}
+
+input.ng-invalid.ng-dirty{
+    border-bottom-color : #e91e63 !important;
+    box-shadow: 0 1px 0 0 #e91e63 !important;
+}
+/*for error div i*/
+div.error-message i{
+    vertical-align: middle !important;
+}
+
+/*for tab control*/
+.tabs{
+    height: 65px;
+}
+.tabs .tab{
+    text-transform : none !important;
+    line-height: 65px;
+    height: 65px;
+}
+.tabs .tab a{
+    font-size: 25px;
+    color: grey !important;
+}
+
+.tabs .tab a.active{
+    background-color: #fff !important;
+}
+
+.green-button{
+    margin-top: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #2c5e30;
+    color: #fff;
+    width: 100%;
+}
+
+.green-button:hover {
+    background-color: #35923d;
+    cursor: pointer;
+}

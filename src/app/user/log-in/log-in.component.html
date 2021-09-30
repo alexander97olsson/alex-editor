@@ -1,0 +1,16 @@
+<p class="main-title">Log in to your account</p>
+<form #loginForm="ngForm" class="col s12 white" (ngSubmit)="OnSubmit(Email.value,Password.value)">
+   <div class="row">
+     <div class="message-container">
+        <input class="input-value" type="email" #Email ngModel name="Email" placeholder="Email" required>
+     </div>
+     <div class="message-container">
+       <input class="input-value" type="password" #Password ngModel name="Password" placeholder="Password" required>
+     </div>
+   </div>
+    <div class="row">
+        <div>
+          <button [disabled]="!loginForm.valid" class="btn-large btn-submit" type="submit">Login</button>
+        </div>
+      </div>
+</form>

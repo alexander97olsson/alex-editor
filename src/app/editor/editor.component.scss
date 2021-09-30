@@ -15,6 +15,9 @@
     font-family: "Lato",sans-serif;
 }
 
+.logged-user {
+    text-align: center;
+}
 
 .console-button-update {
     float: left;
@@ -26,6 +29,18 @@
     font-size: 12px;
     border-radius: 5px;
     border: 2px solid black;
+    font-family: "Lato",sans-serif;
+}
+
+.console-button-blue {
+    margin-left: 10px;
+    width: 120px;
+    height: 40px;
+    cursor: pointer;
+    background-color: rgb(27, 143, 189);
+    font-size: 12px;
+    border-radius: 5px;
+    border: 2px solid rgb(0, 0, 0);
     font-family: "Lato",sans-serif;
 }
 
@@ -44,6 +59,10 @@
 .console-button-update:hover {
     background-color: black;
     color: white;
+}
+
+.console-button-blue:hover {
+    background-color: rgb(21, 181, 245);
 }
 
 .console-button-green:hover {
@@ -70,4 +89,14 @@
     float: left;
     width: 500px;
     height: 40px;
+}
+
+.dropdown-user {
+    float: left;
+    width: 200px;
+    height: 40px;
+}
+
+.share-button {
+    float: right;
 }

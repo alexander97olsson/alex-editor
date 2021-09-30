@@ -1,0 +1,36 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.buttons-container {
+    text-align: center;
+}
+
+.buttons-auth-log {
+    padding: 10px;
+    margin-right: 10px;
+    width: 100px;
+    color: white;
+    text-decoration: none;
+    background-color: #38547b;
+}
+
+.buttons-auth-log:hover {
+    background-color: #5496f3;
+    cursor: pointer;
+}
+
+.buttons-auth-reg {
+    padding: 10px;
+    margin-right: 10px;
+    width: 100px;
+    color: white;
+    text-decoration: none;
+    background-color: #2c5e30;
+}
+
+.buttons-auth-reg:hover {
+    background-color: #35923d;
+    cursor: pointer;
+}
