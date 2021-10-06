@@ -19,23 +19,31 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  OnSubmit(data){
-    console.log(this.user.Email);
-    var user = {
-      email: this.user.Email,
-      password: this.user.Password
-    };
-  
-    fetch(this.url, {
-      body: JSON.stringify(user),
-      headers: {
-          'content-type': 'application/json'
-      },
-      method: 'POST'
-    }).then(function (response) {
-      return response.json();
-    }).then(function(data) {
+  async queryFetch(query, variables) {
+    return fetch('https://ramverk-editor-alos17.azurewebsites.net/graphql', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: query,
+        variables: variables
+      })
+    }).then(res => res.json())
+  }
+
+  async addUser(emailInfo, passwordInfo) {
+    return this.queryFetch(`
+    mutation adduser($email: String!, $password: String!){
+      addUser(email: $email, password: $password) {
+        message
+      }
+    }
+    `, { email: emailInfo, password: passwordInfo }).then(data => {
       console.log(data)
     }).then(() => this.router.navigate(['/login']))
+  }
+
+  async OnSubmit(data){
+    console.log("User:" + this.user.Email + " created");
+    await this.addUser(this.user.Email, this.user.Password);
   }
 }

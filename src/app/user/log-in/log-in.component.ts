@@ -15,6 +15,19 @@ export class LogInComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onClickPrint() {
+    fetch('https://ramverk-editor-alos17.azurewebsites.net/graphql', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query: "{ users { email } }" })
+      })
+      .then(r => r.json())
+      .then(data => console.log('data returned:', data));
+  }
+
   OnSubmit(Email, password){
     var user = {
       email: Email,
