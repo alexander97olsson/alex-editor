@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { globals } from '../../token';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-log-in',

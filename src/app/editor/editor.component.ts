@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 import { Socket } from 'ngx-socket-io';
 import { globals } from '../token';
 import { Router } from '@angular/router';
+//import * as FileSaver from 'file-saver';
+import { saveAs } from 'file-saver';
+import * as html2pdf from 'html2pdf.js';
 
 @Component({
   selector: 'app-editor',
@@ -16,6 +19,8 @@ export class EditorComponent implements OnInit {
   url = `https://ramverk-editor-alos17.azurewebsites.net/data`;
   updateUserUrl = `https://ramverk-editor-alos17.azurewebsites.net/data/user`;
   urlUsers = `https://ramverk-editor-alos17.azurewebsites.net/auth/users`;
+  urlCreatePdf = `https://ramverk-editor-alos17.azurewebsites.net/create-pdf`;
+  urlDownloadPdf = `https://ramverk-editor-alos17.azurewebsites.net/download-pdf`;
   title = 'Alex-Editor';
   public Editor = ClassicEditor;
   public objectDocs = {} as any;
@@ -45,7 +50,6 @@ export class EditorComponent implements OnInit {
     if(!globals.token) {
       this.router.navigate(['/login'])
     }
-    //this.sendMessage("what up server");
   }
 
   ngOnInit() {
@@ -60,6 +64,57 @@ export class EditorComponent implements OnInit {
         this.mainText.setValue(data);
         console.log(data);
     });
+  }
+  
+  saveToPdfNew() {
+    var opt = {
+      margin:       1,
+      filename:     `${this.titleText.value}.pdf`,
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().from(this.content).set(opt).save()
+  }
+
+  public async saving() {
+    this.updateMainText();
+    var delivery = {
+      maintext: this.content,
+    };
+    try {
+      const response = await fetch('http://localhost:1337/create-pdf', {
+        body: JSON.stringify(delivery),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+      });
+      const testar = await response.json();
+      return testar;
+      } catch (error) {
+        console.error(error);
+    }
+  }
+
+  async saveToPdf() {
+    this.updateMainText();
+    var delivery = {
+      maintext: this.content,
+    };
+    await fetch('http://localhost:1337/create-pdf', {
+        body: JSON.stringify(delivery),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+      }).then(async () => { await fetch('http://localhost:1337/download-pdf', {method: 'GET'})
+        .then(response => response.blob())
+        .then(function(myBlob) {
+          var file = new Blob([myBlob], {type: "application/pdf"});
+          return file;
+        }).then((file) => saveAs(file, `pdfdokument`));
+      })
   }
 
   updateMainText() {
@@ -140,6 +195,29 @@ export class EditorComponent implements OnInit {
     this.updateTitleText();
   }
 
+  async onSendMail(data) {
+    console.log(data)
+    const middleHand = await this.getAll();
+    for (let i = 0; i < middleHand.data.msg.length; i++) {
+      if(this.selected == middleHand.data.msg[i]._id) {
+        var delivery = {
+          __id: this.selected,
+          allowed_users: data
+        };
+        fetch(this.updateUserUrl, {
+          body: JSON.stringify(delivery),
+          headers: {
+            'content-type': 'application/json',
+            'x-access-token': globals.token
+          },
+          method: 'PUT'
+          }).then(function (response) {
+            console.log(response)
+          })
+      }
+      }
+  }
+
   onClickSubmit(data) {
     this.updateMainText();
     this.updateTitleText();
@@ -211,35 +289,31 @@ export class EditorComponent implements OnInit {
     for (let i = 0; i < this.objectUsers.data.users.length; i++) {
       if (globals.userLogged != this.objectUsers.data.users[i].email) {
         this.objectUsersComp.push(this.objectUsers.data.users[i]);
-        console.log("added" + this.objectUsers.data.users[i].email);
       }
     }
   }
 
   async onClickSaveUser() {
     const middleHand = await this.getAll();
-    console.log(this.selected)
-    console.log(this.userSelected)
-   for (let i = 0; i < middleHand.data.msg.length; i++) {
-    if(this.selected == middleHand.data.msg[i]._id) {
-      var delivery = {
-        __id: this.selected,
-        allowed_users: this.userSelected
-      };
-      fetch(this.updateUserUrl, {
-        body: JSON.stringify(delivery),
-        headers: {
-          'content-type': 'application/json',
-          'x-access-token': globals.token
-        },
-        method: 'PUT'
-        }).then(function (response) {
-          return response.json();
-        }).then(function(data) {
-          console.log(data)
-        })
-     }
+    for (let i = 0; i < middleHand.data.msg.length; i++) {
+      if(this.selected == middleHand.data.msg[i]._id) {
+        var delivery = {
+          __id: this.selected,
+          allowed_users: this.userSelected
+        };
+        fetch(this.updateUserUrl, {
+          body: JSON.stringify(delivery),
+          headers: {
+            'content-type': 'application/json',
+            'x-access-token': globals.token
+          },
+          method: 'PUT'
+          }).then(function (response) {
+            return response.json();
+          }).then(function(data) {
+            console.log(data)
+          })
+      }
+      }
     }
-  }
-
 }

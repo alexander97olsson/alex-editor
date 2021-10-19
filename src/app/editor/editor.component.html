@@ -1,5 +1,13 @@
 <div class="main">
+    <button class="savePdf" (click)="saveToPdfNew()">Save as pdf</button>
     <h2 class="logged-user">You are logged in as: {{ owner.value }}</h2>
+    <form #loginForm="ngForm" class="col s12 white" (ngSubmit)="onSendMail(Email.value)">
+        <div class="shareUserDiv">
+            <label class="title-header" for="title">Share document new users! </label><br>
+            <input class="input-value" type="email" #Email ngModel name="Email" placeholder="Email" required>
+            <button [disabled]="!loginForm.valid" type="submit">Share use</button>
+        </div> 
+    </form>
     <div class="console-button-load">
         <button class="console-button" (click)="onClickGetAll()">Refresh</button>
         <button class="console-button-green" (click)="onClickLoad()">Load</button>
@@ -21,8 +29,8 @@
         (change)="onChange($event)"
         debounce="500">
         </ckeditor>
-        <br><br>
-        <a class="share-button">Share document with friends!</a><br>
+        <br>
+        <a class="share-button">Share document existing users!</a><br>
         <select class="dropdown-user share-button" id='peeps' name='users' [(ngModel)]="userSelected">
             <option *ngFor="let item of objectUsersComp" [value]="item.email">
               {{item.email}}
