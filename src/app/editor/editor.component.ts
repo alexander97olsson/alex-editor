@@ -66,6 +66,7 @@ export class EditorComponent implements OnInit {
     });
   }
   
+  
   saveToPdfNew() {
     var opt = {
       margin:       1,
